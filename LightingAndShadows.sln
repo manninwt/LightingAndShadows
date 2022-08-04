@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LightingAndShadows", "LightingAndShadows\LightingAndShadows.vcxproj", "{26897AC3-06E3-4141-8448-31421FF5132C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{26897AC3-06E3-4141-8448-31421FF5132C}.Debug|x64.ActiveCfg = Debug|x64
+		{26897AC3-06E3-4141-8448-31421FF5132C}.Debug|x64.Build.0 = Debug|x64
+		{26897AC3-06E3-4141-8448-31421FF5132C}.Debug|x86.ActiveCfg = Debug|Win32
+		{26897AC3-06E3-4141-8448-31421FF5132C}.Debug|x86.Build.0 = Debug|Win32
+		{26897AC3-06E3-4141-8448-31421FF5132C}.Release|x64.ActiveCfg = Release|x64
+		{26897AC3-06E3-4141-8448-31421FF5132C}.Release|x64.Build.0 = Release|x64
+		{26897AC3-06E3-4141-8448-31421FF5132C}.Release|x86.ActiveCfg = Release|Win32
+		{26897AC3-06E3-4141-8448-31421FF5132C}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {20829260-9660-400F-BB4F-A78442012098}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,37 @@
+﻿  Source.cpp
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(272,28): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(314,39): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(317,77): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(381,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(382,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(386,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(387,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(388,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(389,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(422,20): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(462,31): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(462,34): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(463,33): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(463,38): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(464,33): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(464,40): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(470,31): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(470,34): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(471,31): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(471,36): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(472,33): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(472,40): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(480,31): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(481,33): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(481,38): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(482,33): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(482,40): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(490,31): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(491,33): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(491,38): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(492,33): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(500,31): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(500,34): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(501,31): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Source.cpp(502,33): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+  LightingAndShadows.vcxproj -> C:\Development\Graphics\LightingAndShadows\x64\Debug\LightingAndShadows.exe
