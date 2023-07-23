@@ -8,7 +8,22 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include "stb_image.h"
-#include <C:\Development\Graphics\LightingAndShadows\LightingAndShadows\Shader.h>
+#include <C:\Development\VSRepos\LightingAndShadows\LightingAndShadows\Shader.h>
+
+class Triangle {
+public:
+    glm::vec3 k1;
+    glm::vec3 k2;
+    glm::vec3 k3;
+};
+
+class Square {
+public:
+    glm::vec3 k1;
+    glm::vec3 k2;
+    glm::vec3 k3;
+    glm::vec3 k4;
+};
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -19,6 +34,9 @@ std::vector<glm::vec3> CalculateIndicies(std::vector<std::vector<glm::vec3>> ver
 std::vector<glm::vec3> CalculateNormals(std::vector<glm::vec3> vertices);
 glm::vec3 Normalize(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
 std::vector<float> CombineIndsandNormsUntilImSmarter(std::vector<glm::vec3> norms, std::vector<glm::vec3> inds);
+void LoadIndices(glm::vec3 k1, glm::vec3 k2, glm::vec3 k3, std::vector<glm::vec3>& indicesList);
+void LoadIndicesFromTriangle(Triangle triangle, std::vector<glm::vec3>& indicesList);
+void EvaluateSquareSection(glm::vec3 k1, glm::vec3 k2, glm::vec3 k3, glm::vec3 k4, std::vector<glm::vec3>& indicesList);
 
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1440;
@@ -42,20 +60,23 @@ int main()
 {
 #pragma region Path/Shader Stuff
     const char* basePathImages = "C:\\Development\\OpenGL\\Images\\";
-    const char* basePathProj = "C:\\Development\\Graphics\\LightingAndShadows\\";
+    const char* basePathProj = "C:\\Development\\VSRepos\\LightingAndShadows\\";
 
-    char vsShader2Path[100];
-    char vsShaderPath[100];
-    char fsShaderPath[100];
-    char fsShader2Path[100];
-    strcpy_s(vsShaderPath, basePathProj);
-    strcpy_s(vsShader2Path, basePathProj);
-    strcpy_s(fsShaderPath, basePathProj);
-    strcpy_s(fsShader2Path, basePathProj);
-    strcat_s(vsShaderPath, "LightingAndShadows\\shader.vs");
-    strcat_s(vsShader2Path, "LightingAndShadows\\shader2.vs");
-    strcat_s(fsShaderPath, "LightingAndShadows\\shader.fs");
-    strcat_s(fsShader2Path, "LightingAndShadows\\shader2.fs");
+    char lightCubeVsShader[100];
+    char lightCubeFsShader[100];
+    char sphereVsShader[100];
+    char sphereFsShader[100];
+
+    strcpy_s(lightCubeVsShader, basePathProj);
+    strcpy_s(sphereVsShader, basePathProj);
+    strcpy_s(lightCubeFsShader, basePathProj);
+    strcpy_s(sphereFsShader, basePathProj);
+
+    strcat_s(lightCubeVsShader, "LightingAndShadows\\shader.vs");
+    strcat_s(lightCubeFsShader, "LightingAndShadows\\shader.fs");
+
+    strcat_s(sphereVsShader, "LightingAndShadows\\shader2.vs");
+    strcat_s(sphereFsShader, "LightingAndShadows\\shader2.fs");
 
     char containerPath[100];
     strcpy_s(containerPath, basePathImages);
@@ -222,6 +243,9 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
     unsigned int VAO1;
     glGenVertexArrays(1, &VAO1);
     glBindVertexArray(VAO1);
@@ -249,8 +273,8 @@ int main()
     //glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(3 * sizeof(float)));
     //glEnableVertexAttribArray(1);
 
-    Shader shaderA(vsShaderPath, fsShaderPath);
-    Shader shaderB(vsShader2Path, fsShader2Path);
+    Shader sphereShader(sphereVsShader, sphereFsShader);
+    Shader lightCubeShader(lightCubeVsShader, lightCubeFsShader);
     /*ourShader.setInt("texture1", 0);
     ourShader.setInt("texture2", 1);*/
 
@@ -284,22 +308,23 @@ int main()
         //glActiveTexture(GL_TEXTURE1);
         //glBindTexture(GL_TEXTURE_2D, texture2);
 
-        shaderA.use();
+        sphereShader.use();
 
 
-        shaderA.setVec3("objectColor", 1.0f, 1.0f, 0.2f);
-        shaderA.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        sphereShader.setVec3("objectColor", 1.0f, 1.0f, 0.2f);
+        sphereShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        sphereShader.setVec3("lightPos", lightPos);
 
         // Camera Work/View Matrix
         glm::mat4 view = glm::mat4(1.0f);
         const float radius = 10.0f;
         view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-        shaderA.setMat4("view", view);
+        sphereShader.setMat4("view", view);
 
         // Projection Matrix
         glm::mat4 projection;
         projection = glm::perspective(glm::radians(fov), 1920.0f / 1440.0f, 0.1f, 500.0f);
-        shaderA.setMat4("projection", projection);
+        sphereShader.setMat4("projection", projection);
 
         glBindVertexArray(VAO);
 
@@ -312,27 +337,27 @@ int main()
             float angle = 20.0f * i;
             if (i % 3 == 0)  // every 3rd iteration (including the first) we set the angle using GLFW's time function.
                 angle = glfwGetTime() * 25.0f;
-            shaderA.setMat4("model", model);
+            sphereShader.setMat4("model", model);
 
             glDrawArrays(GL_TRIANGLES, 0, indices.size() * sizeof(glm::vec3));
         }
 
-        shaderB.use();
+        lightCubeShader.use();
 
         glm::mat4 viewb = glm::mat4(1.0f);
         const float radiusb = 10.0f;
         viewb = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-        shaderB.setMat4("view", viewb);
+        lightCubeShader.setMat4("view", viewb);
 
         // Projection Matrix
         glm::mat4 projectionb;
         projectionb = glm::perspective(glm::radians(fov), 1920.0f / 1440.0f, 0.1f, 500.0f);
-        shaderB.setMat4("projection", projectionb);
+        lightCubeShader.setMat4("projection", projectionb);
 
         glm::mat4 modelb = glm::mat4(1.0f);
         modelb = glm::translate(modelb, lightPos);
         modelb = glm::scale(modelb, glm::vec3(0.2f));
-        shaderB.setMat4("model", modelb);
+        lightCubeShader.setMat4("model", modelb);
 
         glBindVertexArray(VAO1);
         glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices));
@@ -457,58 +482,96 @@ std::vector<glm::vec3> CalculateIndicies(std::vector<std::vector<glm::vec3>> ver
     {
         for (float j = 0.0; j <= sectorCount; ++j)
         {
-            if (j != sectorCount && i != 0)
+            // First passthrough in which we are dealing with the very top point of the circle
+            if (i == 0) 
+            {
+                k1 = vertices[0][0];
+                k2 = vertices[1][j];
+                // Conditional to wrap around to the first point for the final sector triangle
+                if (j != sectorCount)
+                {
+                    k3 = vertices[1][j + 1];
+                }
+                else
+                {
+                    k3 = vertices[1][0];
+                }
+
+                LoadIndices(k1, k2, k3, indices);
+            }
+            else if (j != sectorCount && i != 0 && i != stackCount - 1)
             {
                 k1 = vertices[i][j];
                 k2 = vertices[i + 1][j];
-                k3 = vertices[i + 1][j + 1];
+                k3 = vertices[i][j + 1];
+                k4 = vertices[i + 1][j + 1];
 
-                indices.push_back(k1);
-                indices.push_back(k2);
-                indices.push_back(k3);
-
-                k4 = vertices[i][j];
-                k5 = vertices[i][j + 1];
-                k6 = vertices[i + 1][j + 1];
-
-                indices.push_back(k4);
-                indices.push_back(k5);
-                indices.push_back(k6);
+                EvaluateSquareSection(k1, k2, k3, k4, indices);
             }
-            else if (i == 0 && j != sectorCount)
+            else if (j == sectorCount && i != stackCount) 
             {
-                k4 = vertices[i][0];
-                k5 = vertices[i + 1][j];
-                k6 = vertices[i + 1][j + 1];
+                k1 = vertices[i][j];
+                k2 = vertices[i + 1][j];
+                k3 = vertices[i][0];
+                k4 = vertices[i + 1][0];
 
-                indices.push_back(k4);
-                indices.push_back(k5);
-                indices.push_back(k6);
-            }
-            else if (i == 0 && j == sectorCount)
-            {
-                k4 = vertices[i][0];
-                k5 = vertices[i + 1][j];
-                k6 = vertices[i + 1][0];
-
-                indices.push_back(k4);
-                indices.push_back(k5);
-                indices.push_back(k6);
+                EvaluateSquareSection(k1, k2, k3, k4, indices);
             }
             else
             {
-                k1 = vertices[i][j];
-                k2 = vertices[i][1];
-                k3 = vertices[i + 1][1];
+                k1 = vertices[i][0];
+                k2 = vertices[i - 1][j];
+                // Conditional to wrap around to the first point for the final sector triangle
+                if (j != sectorCount)
+                {
+                    k3 = vertices[i - 1][j + 1];
+                }
+                else
+                {
+                    k3 = vertices[i - 1][0];
+                }
 
-                indices.push_back(k1);
-                indices.push_back(k2);
-                indices.push_back(k3);
+                LoadIndices(k1, k2, k3, indices);
             }
         }
     }
 
     return indices;
+}
+
+void LoadIndices(glm::vec3 k1, glm::vec3 k2, glm::vec3 k3, std::vector<glm::vec3>& indicesList)
+{
+    indicesList.push_back(k1);
+    indicesList.push_back(k2);
+    indicesList.push_back(k3);
+}
+
+void LoadIndicesFromTriangle(Triangle triangle, std::vector<glm::vec3>& indicesList)
+{
+    indicesList.push_back(triangle.k1);
+    indicesList.push_back(triangle.k2);
+    indicesList.push_back(triangle.k3);
+}
+
+void EvaluateSquareSection(glm::vec3 k1, glm::vec3 k2, glm::vec3 k3, glm::vec3 k4, std::vector<glm::vec3>& indicesList)
+{
+    Square section;
+    Triangle triangle1, triangle2;
+
+    section.k1 = k1;
+    section.k2 = k2;
+    section.k3 = k3;
+    section.k4 = k4;
+
+    triangle1.k1 = section.k1;
+    triangle1.k2 = section.k2;
+    triangle1.k3 = section.k3;
+    LoadIndicesFromTriangle(triangle1, indicesList);
+
+    triangle2.k1 = section.k3;
+    triangle2.k2 = section.k2;
+    triangle2.k3 = section.k3;
+    LoadIndicesFromTriangle(triangle2, indicesList);
 }
 
 std::vector<glm::vec3> CalculateNormals(std::vector<glm::vec3> vertices)
@@ -551,10 +614,18 @@ std::vector<float> CombineIndsandNormsUntilImSmarter(std::vector<glm::vec3> norm
         floatArray.push_back(norms[j].x);
         floatArray.push_back(norms[j].y);
         floatArray.push_back(norms[j].z);
-
-        if (i % 3 == 0 && j != 798)
+        
+        if (i % 3 == 0)
         {
-            j += 1;
+            if (j != 797) 
+            {
+                j += 1;
+            }
+            else 
+            {
+                j = 0;
+            }
+            
         }
     }
 
