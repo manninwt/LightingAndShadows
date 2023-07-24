@@ -160,8 +160,8 @@ int main()
       -7.0f,  7.0f, -57.0f//,  0.0f, 1.0f
     };
 
-    std::vector<std::vector<glm::vec3>> sphereVertices = CalculateVerticies(15.0f, 12.0f, -10.0f, 7.0f, 20, 20);
-    std::vector<glm::vec3> verts = CalculateIndicies(sphereVertices, 20, 20);
+    std::vector<std::vector<glm::vec3>> sphereVertices = CalculateVerticies(15.0f, 12.0f, -10.0f, 7.0f, 150, 150);
+    std::vector<glm::vec3> verts = CalculateIndicies(sphereVertices, 150, 150);
     std::vector<glm::vec3> normals = CalculateNormals(verts);
     std::vector<float> indices = CombineIndsandNormsUntilImSmarter(normals, verts);
 
@@ -448,14 +448,14 @@ std::vector<std::vector<glm::vec3>> CalculateVerticies(GLfloat centerPosX, GLflo
 
     vertices.push_back(std::vector<glm::vec3>());
 
-    glm::vec3 vert;
-    vert[0] = centerPosX;
-    vert[1] = centerPosY;
-    vert[2] = centerPosZ + radius;
+    glm::vec3 initVert;
+    initVert[0] = centerPosX;
+    initVert[1] = centerPosY;
+    initVert[2] = centerPosZ + radius;
 
-    vertices[0].push_back(vert);
+    vertices[0].push_back(initVert);
 
-    for (float i = 1.0; i <= stackCount; i++)
+    for (float i = 1.0; i <= stackCount - 1; i++)
     {
         vertices.push_back(std::vector<glm::vec3>());
         float sigma = (pi / 2) - (pi * (i / stackCount));
@@ -470,6 +470,14 @@ std::vector<std::vector<glm::vec3>> CalculateVerticies(GLfloat centerPosX, GLflo
             vertices[(int)i].push_back(vert);
         }
     }
+
+    vertices.push_back(std::vector<glm::vec3>());
+    glm::vec3 finalVert;
+    finalVert[0] = centerPosX;
+    finalVert[1] = centerPosY;
+    finalVert[2] = centerPosZ - radius;
+
+    vertices[stackCount].push_back(finalVert);
     return vertices;
 }
 
@@ -499,6 +507,23 @@ std::vector<glm::vec3> CalculateIndicies(std::vector<std::vector<glm::vec3>> ver
 
                 LoadIndices(k1, k2, k3, indices);
             }
+            // Last passthrough in which we are dealing with the very bottom point of the circle
+            else if (i == stackCount - 1)
+            {
+                k1 = vertices[stackCount][0];
+                k2 = vertices[i][j];
+                // Conditional to wrap around to the first point for the final sector triangle
+                if (j != sectorCount)
+                {
+                    k3 = vertices[i][j + 1];
+                }
+                else
+                {
+                    k3 = vertices[i][0];
+                }
+
+                LoadIndices(k1, k2, k3, indices);
+            }
             else if (j != sectorCount && i != 0 && i != stackCount - 1)
             {
                 k1 = vertices[i][j];
@@ -508,7 +533,7 @@ std::vector<glm::vec3> CalculateIndicies(std::vector<std::vector<glm::vec3>> ver
 
                 EvaluateSquareSection(k1, k2, k3, k4, indices);
             }
-            else if (j == sectorCount && i != stackCount) 
+            else if (j == sectorCount && i != stackCount - 1) 
             {
                 k1 = vertices[i][j];
                 k2 = vertices[i + 1][j];
@@ -570,7 +595,7 @@ void EvaluateSquareSection(glm::vec3 k1, glm::vec3 k2, glm::vec3 k3, glm::vec3 k
 
     triangle2.k1 = section.k3;
     triangle2.k2 = section.k2;
-    triangle2.k3 = section.k3;
+    triangle2.k3 = section.k4;
     LoadIndicesFromTriangle(triangle2, indicesList);
 }
 
@@ -606,6 +631,8 @@ std::vector<float> CombineIndsandNormsUntilImSmarter(std::vector<glm::vec3> norm
 {
     std::vector<float> floatArray;
 
+    int counter = 1;
+
     for (int i = 0, j = 0; i < inds.size(); i += 1)
     {
         floatArray.push_back(inds[i].x);
@@ -614,19 +641,22 @@ std::vector<float> CombineIndsandNormsUntilImSmarter(std::vector<glm::vec3> norm
         floatArray.push_back(norms[j].x);
         floatArray.push_back(norms[j].y);
         floatArray.push_back(norms[j].z);
+
+        if (j == (inds.size() / 3) - 2) {
+            printf("potato");
+        }
         
-        if (i % 3 == 0)
+        if (counter == 3)
         {
-            if (j != 797) 
+            if (j != (inds.size()/3) - 2) 
             {
                 j += 1;
             }
-            else 
-            {
-                j = 0;
-            }
-            
+            // Setting counter to zero because the counter increment will set it to one for the next iteration
+            counter = 0;
         }
+
+        counter += 1;
     }
 
     return floatArray;
